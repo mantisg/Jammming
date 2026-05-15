@@ -1,0 +1,18 @@
+.Track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.track-info {
+    display: flex;
+    align-items: center;
+}
+
+.album-art {
+    width: 64px;
+    height: 64px;
+    margin-right: 10px;
+}
