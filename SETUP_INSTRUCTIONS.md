@@ -113,7 +113,7 @@ Check browser console for errors. Make sure your Client ID is correct in `.env.l
 Create `.env.production.local` or use production environment variables in your host:
 ```env
 VITE_SPOTIFY_CLIENT_ID=your_client_id
-VITE_REDIRECT_URI=https://joshjammming.netlify.app/callback
+VITE_REDIRECT_URI=your_callback_uri
 ```
 
 > Note: Vite also loads `.env.local` in production builds, but `.env.production.local` is the preferred place for production-specific values. If you already use `.env.local`, it will still be read and can override `.env` values.
