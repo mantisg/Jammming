@@ -83,6 +83,12 @@ class SpotifyService {
 
     const authUrl = `${SPOTIFY_AUTH_URL}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopes.join(' '))}&code_challenge_method=S256&code_challenge=${codeChallenge}&show_dialog=true`;
 
+    console.info('Spotify auth redirect', {
+      authUrl,
+      redirectUri: REDIRECT_URI,
+      clientId: clientId ? '[configured]' : '[missing]',
+    });
+
     window.location.href = authUrl;
   }
 

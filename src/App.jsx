@@ -43,7 +43,7 @@ function App() {
         window.history.replaceState({}, document.title, window.location.pathname);
 
         if (!success || !loggedIn) {
-          setError('Spotify login failed. Make sure you are using the exact registered redirect URI and open the app at 127.0.0.1:5173.');
+          setError('Spotify login failed. Make sure your redirect URI is exactly configured in the Spotify Dashboard and your deployed app is using the same value.');
           console.error('Spotify login failed: callback did not return an access token.');
           return;
         }
