@@ -3,7 +3,10 @@
  * Uses Axios to make direct calls to Spotify API
  */
 
-const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+function getClientId() {
+  return sessionStorage.getItem('spotify_client_id') || import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+}
+
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI || 'http://localhost:5173/callback';
 const SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize';
 const SPOTIFY_API_URL = 'https://api.spotify.com/v1';
@@ -68,7 +71,12 @@ class SpotifyService {
       'playlist-modify-private',
     ];
 
-    const authUrl = `${SPOTIFY_AUTH_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopes.join(' '))}&code_challenge_method=S256&code_challenge=${codeChallenge}&show_dialog=true`;
+    const clientId = getClientId();
+    if (!clientId) {
+      throw new Error('Spotify Client ID is not configured. Provide a client ID in env or enter one when prompted.');
+    }
+
+    const authUrl = `${SPOTIFY_AUTH_URL}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopes.join(' '))}&code_challenge_method=S256&code_challenge=${codeChallenge}&show_dialog=true`;
 
     window.location.href = authUrl;
   }
@@ -83,13 +91,18 @@ class SpotifyService {
         console.error('Missing PKCE code verifier in sessionStorage. Check that the app was opened from the same origin as the Spotify redirect URI.');
       }
 
+      const clientId = getClientId();
+      if (!clientId) {
+        throw new Error('Spotify Client ID is not configured. Provide a client ID in env or enter one when prompted.');
+      }
+
       const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          client_id: CLIENT_ID,
+          client_id: clientId,
           grant_type: 'authorization_code',
           code,
           redirect_uri: REDIRECT_URI,
