@@ -123,7 +123,7 @@ VITE_REDIRECT_URI=your_callback_uri
 If you're deploying the frontend to Netlify, set the environment variables in Netlify's Site settings (these are used during the build):
 
 - `VITE_SPOTIFY_CLIENT_ID` = your Spotify Client ID
-- `VITE_REDIRECT_URI` = https://joshjammming.netlify.app/callback
+- `VITE_REDIRECT_URI` = your_callback_uri
 
 After setting these, trigger a new deploy so Vite bakes the variables into the production bundle.
 
