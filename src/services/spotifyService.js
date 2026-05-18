@@ -12,7 +12,7 @@ function getClientId() {
   return sessionValue || envValue;
 }
 
-const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI || 'http://localhost:5173/callback';
+const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI || (typeof window !== 'undefined' ? `${window.location.origin}/callback` : 'http://localhost:5173/callback');
 const SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize';
 const SPOTIFY_API_URL = 'https://api.spotify.com/v1';
 
