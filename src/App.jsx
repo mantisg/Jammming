@@ -13,10 +13,15 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState('');
+  const [missingClientId, setMissingClientId] = useState(false);
 
   // Check if user is logged in on mount
   useEffect(() => {
     setIsLoggedIn(SpotifyService.isLoggedIn());
+    if (!import.meta.env.VITE_SPOTIFY_CLIENT_ID) {
+      setMissingClientId(true);
+      setError('Missing Spotify Client ID. Set VITE_SPOTIFY_CLIENT_ID in .env.local or your production build environment.');
+    }
   }, []);
 
   // Handle Spotify callback (when redirected back from Spotify login)
@@ -162,6 +167,11 @@ function App() {
       </header>
 
       {error && <div className="error-message">{error}</div>}
+      {missingClientId && (
+        <div className="error-message">
+          Missing Spotify Client ID. Ensure `VITE_SPOTIFY_CLIENT_ID` is set in your production build environment or `.env.local`.
+        </div>
+      )}
 
       {isLoggedIn ? (
         <main className="main-content">

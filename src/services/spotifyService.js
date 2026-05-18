@@ -4,7 +4,12 @@
  */
 
 function getClientId() {
-  return sessionStorage.getItem('spotify_client_id') || import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+  const sessionValue = sessionStorage.getItem('spotify_client_id');
+  const envValue = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+  if (!sessionValue && !envValue) {
+    console.error('Spotify Client ID is missing. Ensure VITE_SPOTIFY_CLIENT_ID is set in .env.local or your production build environment.');
+  }
+  return sessionValue || envValue;
 }
 
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI || 'http://localhost:5173/callback';
@@ -73,7 +78,7 @@ class SpotifyService {
 
     const clientId = getClientId();
     if (!clientId) {
-      throw new Error('Spotify Client ID is not configured. Provide a client ID in env or enter one when prompted.');
+      throw new Error('Spotify Client ID is not configured. Set VITE_SPOTIFY_CLIENT_ID in your build environment, or add it to .env.local for local development.');
     }
 
     const authUrl = `${SPOTIFY_AUTH_URL}?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopes.join(' '))}&code_challenge_method=S256&code_challenge=${codeChallenge}&show_dialog=true`;
@@ -93,7 +98,7 @@ class SpotifyService {
 
       const clientId = getClientId();
       if (!clientId) {
-        throw new Error('Spotify Client ID is not configured. Provide a client ID in env or enter one when prompted.');
+        throw new Error('Spotify Client ID is not configured. Set VITE_SPOTIFY_CLIENT_ID in your build environment, or add it to .env.local for local development.');
       }
 
       const response = await fetch('https://accounts.spotify.com/api/token', {
