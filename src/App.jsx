@@ -7,6 +7,7 @@ import SpotifyService from './services/spotifyService';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [playlistName, setPlaylistName] = useState('New Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -42,11 +43,17 @@ function App() {
           return;
         }
 
+        // Fetch and store current user's profile for UI
+        SpotifyService.getCurrentUser()
+          .then(user => setCurrentUser(user))
+          .catch(err => console.error('Failed to fetch current user after login:', err));
+
         console.log('Spotify login success, isLoggedIn:', loggedIn);
       })
       .catch(err => {
-        setError('Failed to log in');
-        console.error(err);
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg || 'Failed to log in');
+        console.error('Callback handling error:', err);
       });
   }, []);
 
@@ -56,16 +63,17 @@ function App() {
     try {
       await SpotifyService.redirectToSpotifyLogin();
     } catch (err) {
-      setError('Failed to initiate login');
-      console.error(err);
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg || 'Failed to initiate login');
+      console.error('Login initiation error:', err);
     }
   };
 
   const handleLogout = () => {
     SpotifyService.logout();
-    sessionStorage.removeItem('spotify_code_callback_handled');
     sessionStorage.removeItem('spotify_granted_scope');
     setIsLoggedIn(false);
+    setCurrentUser(null);
     setPlaylistTracks([]);
     setSearchResults([]);
     setPlaylistName('New Playlist');
@@ -139,9 +147,12 @@ function App() {
         <h1>🎵 Jammming</h1>
         <div className="auth-section">
           {isLoggedIn ? (
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
-            </button>
+            <>
+              <span className="user-info">{currentUser ? `Connected as ${currentUser.display_name || currentUser.id}` : 'Connected'}</span>
+              <button className="logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
           ) : (
             <button className="login-btn" onClick={handleLoginClick}>
               Connect with Spotify

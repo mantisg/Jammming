@@ -113,8 +113,17 @@ Check browser console for errors. Make sure your Client ID is correct in `.env.l
 Create `.env.production.local`:
 ```env
 VITE_SPOTIFY_CLIENT_ID=your_client_id
-VITE_REDIRECT_URI=https://yourdomain.com/callback
+VITE_REDIRECT_URI=https://joshjammming.netlify.app/callback
 ```
+
+### Netlify specific
+
+If you're deploying the frontend to Netlify, set the environment variables in Netlify's Site settings (these are used during the build):
+
+- `VITE_SPOTIFY_CLIENT_ID` = your Spotify Client ID
+- `VITE_REDIRECT_URI` = https://joshjammming.netlify.app/callback
+
+After setting these, trigger a new deploy so Vite bakes the variables into the production bundle.
 
 Spotify strictly requires HTTPS for production deployments.
 

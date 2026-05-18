@@ -87,8 +87,16 @@ Visit `http://localhost:5173` and click "Connect with Spotify"
 ## Deployment Considerations
 
 When deploying to production:
-1. Update `.env` file with your production URL
-2. Update Spotify Dashboard redirect URI to `https://yourdomain.com/callback`
-3. Build: `npm run build`
-4. Deploy the `dist/` folder
+1. Configure environment variables in your hosting provider for the build step (these are read at build-time by Vite):
+
+   - `VITE_SPOTIFY_CLIENT_ID` = your Spotify app Client ID
+   - `VITE_REDIRECT_URI` = https://joshjammming.netlify.app/callback (or your production callback URL)
+
+   Example (Netlify): Site Settings → Build & deploy → Environment → Add variables
+
+2. In the Spotify Dashboard, edit your app settings and add the exact redirect URI you will use, for example:
+
+   `https://joshjammming.netlify.app/callback`
+
+3. Run the build (`npm run build`) and deploy the generated `dist/` folder. Re-deploy after changing environment variables so the new values are baked into the build.
 
