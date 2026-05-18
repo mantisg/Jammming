@@ -14,12 +14,15 @@ PKCE is specifically designed for single-page applications and securely handles 
 
 ### 1. Environment Variables
 
-Create a `.env.local` file in your project root (copy from `.env.local.example`):
+Create a `.env.local` file in your project root (copy from `.env.example`):
 
 ```env
 VITE_SPOTIFY_CLIENT_ID=your_actual_client_id
 VITE_REDIRECT_URI=http://localhost:5173/callback
 ```
+
+> Note: Vite loads `.env.local` automatically for both development and production builds, and it will override values from `.env` if present. Use `.env.local` for local values and `.env.production.local` for production build overrides if needed.
+
 
 ### 2. Spotify Dashboard Configuration
 
