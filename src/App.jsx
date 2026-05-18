@@ -53,16 +53,7 @@ function App() {
   const handleLoginClick = async () => {
     sessionStorage.removeItem('spotify_code_callback_handled');
     sessionStorage.removeItem('spotify_granted_scope');
-
-    // Optionally allow a user to provide their own Spotify Client ID
     try {
-      const input = window.prompt('Enter your Spotify Client ID (leave blank to use app default):', '');
-      if (input && input.trim()) {
-        sessionStorage.setItem('spotify_client_id', input.trim());
-      } else {
-        sessionStorage.removeItem('spotify_client_id');
-      }
-
       await SpotifyService.redirectToSpotifyLogin();
     } catch (err) {
       setError('Failed to initiate login');
